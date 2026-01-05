@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Campeonato de Confrades – Adolfo Lona</title>
+  <style>
+    :root{
+      --bg:#0b0b0f; --card:#14141b; --muted:#9aa0a6; --text:#f2f3f5;
+      --accent:#f3c969; --ok:#39d98a; --bad:#ff5c5c; --line:#242433;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 600px at 20% 0%, #1a1223 0%, var(--bg) 60%),
+                  radial-gradient(900px 500px at 100% 10%, #1d2a1a 0%, rgba(0,0,0,0) 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:980px;margin:0 auto;padding:18px}
+    header{
+      display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+      padding:14px 14px 0 14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+    }
+    .logo{
+      width:44px;height:44px;border-radius:14px;
+      background: linear-gradient(135deg, rgba(243,201,105,.95), rgba(255,255,255,.08));
+      box-shadow: 0 10px 30px rgba(243,201,105,.2);
+      display:grid;place-items:center;color:#1b1407;font-weight:900;
+    }
+    h1{font-size:18px;margin:0}
+    .sub{color:var(--muted);font-size:13px;margin-top:3px}
+    .pill{
+      border:1px solid var(--line); background: rgba(255,255,255,.04);
+      padding:8px 10px; border-radius:999px; color:var(--muted); font-size:13px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .grid{
+      display:grid; grid-template-columns: 1.2fr .8fr; gap:14px;
+      padding:14px;
+    }
+    @media (max-width:900px){ .grid{grid-template-columns:1fr} }
+    .card{
+      background: rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow: 0 14px 50px rgba(0,0,0,.35);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:14px 14px 10px 14px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    }
+    .title{font-weight:800}
+    .meta{color:var(--muted);font-size:12.5px;margin-top:4px}
+    .card .bd{padding:14px}
+    label{display:block; font-size:12.5px; color:var(--muted); margin:10px 0 6px}
+    input, textarea, select{
+      width:100%; padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.25);
+      color: var(--text);
+      outline:none;
+    }
+    textarea{min-height:72px; resize:vertical}
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    @media (max-width:600px){ .row{grid-template-columns:1fr} }
+    .btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    button{
+      border:0; padding:11px 12px; border-radius:12px; cursor:pointer;
+      font-weight:800;
+    }
+    .primary{
+      background: linear-gradient(135deg, var(--accent), rgba(255,255,255,.22));
+      color:#1b1407;
+    }
+    .ghost{
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--line);
+      color: var(--text);
+    }
+    .danger{
+      background: rgba(255,92,92,.12);
+      border:1px solid rgba(255,92,92,.35);
+      color: var(--text);
+    }
+    .msg{
+      margin-top:12px; padding:12px; border-radius:14px; border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.35;
+    }
+    .msg.ok{border-color:rgba(57,217,138,.35); background: rgba(57,217,138,.08); color: #d9fff0}
+    .msg.bad{border-color:rgba(255,92,92,.35); background: rgba(255,92,92,.08); color: #ffe1e1}
+    .kpi{
+      display:grid; grid-template-columns: repeat(3,1fr); gap:10px;
+    }
+    .kpi .box{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+    }
+    .kpi .num{font-size:18px; font-weight:900}
+    .kpi .lbl{font-size:12px; color:var(--muted); margin-top:2px}
+    table{
+      width:100%; border-collapse:collapse; font-size:13px;
+      overflow:hidden; border-radius:14px; border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+    }
+    th, td{padding:10px 10px; border-bottom:1px solid var(--line); text-align:left}
+    th{color:var(--muted); font-weight:700; font-size:12px}
+    tr:last-child td{border-bottom:0}
+    .tag{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:4px 8px; border-radius:999px; font-size:12px; color:var(--muted);
+      border:1px solid var(--line); background: rgba(255,255,255,.03);
+    }
+    .foot{
+      padding:0 14px 16px 14px; color:var(--muted); font-size:12px;
+    }
+    a{color:var(--accent); text-decoration:none}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">AL</div>
+        <div>
+          <h1>Campeonato de Confrades</h1>
+          <div class="sub">Jogo web com pontuação local (ideal para MVP no GitHub Pages)</div>
+        </div>
+      </div>
+      <div class="pill">
+        <span>Rodada:</span>
+        <strong id="roundLabel">—</strong>
+        <span class="tag" id="difficultyTag">—</span>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- JOGO -->
+      <section class="card">
+        <div class="hd">
+          <div>
+            <div class="title">🎯 Enigma da Semana</div>
+            <div class="meta" id="questionMeta">—</div>
+          </div>
+          <div class="tag" id="timerTag">⏱️ Sem limite</div>
+        </div>
+
+        <div class="bd">
+          <div style="font-size:15.5px; font-weight:800; line-height:1.35" id="questionText">Carregando…</div>
+
+          <div class="row">
+            <div>
+              <label for="playerName">Nome do confrade</label>
+              <input id="playerName" placeholder="Ex.: Lucca" />
+            </div>
+            <div>
+              <label for="orderId">Nº do pedido (opcional)</label>
+              <input id="orderId" placeholder="Ex.: #12345" />
+            </div>
+          </div>
+
+          <label for="answer">Resposta</label>
+          <input id="answer" placeholder="Digite sua resposta aqui…" />
+
+          <div class="btns">
+            <button class="primary" id="btnSubmit">Enviar resposta</button>
+            <button class="ghost" id="btnHint">Pedir dica (-2 pts)</button>
+            <button class="ghost" id="btnNext">Próxima rodada (admin)</button>
+            <button class="danger" id="btnReset">Zerar placar (local)</button>
+          </div>
+
+          <div class="msg" id="msgBox">
+            Dica: a pontuação fica salva <strong>no seu navegador</strong>. Para um campeonato “de verdade” (mesmo ranking para todo mundo), precisa de servidor/banco.
+          </div>
+        </div>
+
+        <div class="foot">
+          Regras sugeridas: +3 acerto; +5 se acertar sem dica; -2 ao pedir dica; bônus +2 para o primeiro acerto da rodada.
+          <br/>Você pode editar as perguntas no código em <code>QUESTIONS</code>.
+        </div>
+      </section>
+
+      <!-- PLACAR -->
+      <aside class="card">
+        <div class="hd">
+          <div>
+            <div class="title">🏅 Placar</div>
+            <div class="meta">Ranking local (navegador). Ordena por pontos totais.</div>
+          </div>
+          <button class="ghost" id="btnExport" title="Copia o ranking para colar no WhatsApp">Exportar</button>
+        </div>
+
+        <div class="bd">
+          <div class="kpi">
+            <div class="box">
+              <div class="num" id="kpiPlayers">0</div>
+              <div class="lbl">Confrades no ranking</div>
+            </div>
+            <div class="box">
+              <div class="num" id="kpiAnswers">0</div>
+              <div class="lbl">Respostas registradas</div>
+            </div>
+            <div class="box">
+              <div class="num" id="kpiRound">1</div>
+              <div class="lbl">Rodada atual</div>
+            </div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Confrade</th>
+                <th>Pontos</th>
+                <th>Acertos</th>
+              </tr>
+            </thead>
+            <tbody id="leaderBody">
+              <tr><td colspan="4" style="color:var(--muted)">Ainda não há pontuações.</td></tr>
+            </tbody>
+          </table>
+
+          <div style="height:12px"></div>
+
+          <div class="msg" id="roundWinnersBox">
+            <strong>Vencedor da rodada:</strong> ainda ninguém.
+          </div>
+        </div>
+
+        <div class="foot">
+          Para publicar no GitHub Pages: suba este arquivo como <code>index.html</code> e ative <em>Settings → Pages</em>.
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    /********************
+     * CONFIG DO JOGO
+     ********************/
+    const QUESTIONS = [
+      {
+        id: 1,
+        title: "Nem toda bolha nasce igual…",
+        difficulty: "Fácil",
+        timeLimitSec: 0, // 0 = sem limite
+        prompt:
+          "Qual método de elaboração realiza a segunda fermentação na própria garrafa?",
+        // Aceita variações comuns (sem acento, com/sem 'método', etc.)
+        accepted: [
+          "metodo tradicional",
+          "método tradicional",
+          "tradicional"
+        ],
+        hint:
+          "Procure no site por um espumante cuja descrição mencione segunda fermentação na garrafa (não em tanque)."
+      },
+      {
+        id: 2,
+        title: "Silêncio, tempo e leveduras…",
+        difficulty: "Médio",
+        timeLimitSec: 0,
+        prompt:
+          "Qual é o tipo de espumante que costuma ter contato prolongado com as leveduras antes do dégorgement?",
+        accepted: [
+          "metodo tradicional",
+          "método tradicional",
+          "tradicional"
+        ],
+        hint:
+          "O nome do método já entrega a técnica de maturação na garrafa."
+      },
+      {
+        id: 3,
+        title: "Caça ao detalhe 👀",
+        difficulty: "Difícil",
+        timeLimitSec: 0,
+        prompt:
+          "Na ficha técnica de um espumante, qual termo indica a retirada do sedimento após a segunda fermentação?",
+        accepted: [
+          "degorgement",
+          "dégorgement",
+          "degorjamento",
+          "desgorgement",
+          "desgorgement"
+        ],
+        hint:
+          "É uma palavra francesa bem comum em método tradicional."
+      }
+    ];
+
+    // Pontuação
+    const POINTS = {
+      correct: 3,
+      correctNoHintBonus: 2,  // (total vira 5)
+      hintPenalty: 2,
+      firstCorrectBonus: 2
+    };
+
+    /********************
+     * STORAGE (local)
+     ********************/
+    const LS_KEYS = {
+      state: "al_game_state_v1",
+      leaderboard: "al_game_leaderboard_v1",
+      roundResults: "al_game_round_results_v1"
+    };
+
+    function loadJSON(key, fallback){
+      try{
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      }catch(e){
+        return fallback;
+      }
+    }
+    function saveJSON(key, value){
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    // Estado do jogo
+    const state = loadJSON(LS_KEYS.state, {
+      roundIndex: 0,
+      hintUsedThisRoundBy: {}, // name -> true
+      startedAt: Date.now()
+    });
+
+    // leaderboard: { [name]: { points, correct, attempts } }
+    const leaderboard = loadJSON(LS_KEYS.leaderboard, {});
+    // roundResults: { [questionId]: { firstWinnerName: string|null, winners: [name] } }
+    const roundResults = loadJSON(LS_KEYS.roundResults, {});
+
+    /********************
+     * UI ELEMENTS
+     ********************/
+    const el = (id) => document.getElementById(id);
+
+    const roundLabel = el("roundLabel");
+    const difficultyTag = el("difficultyTag");
+    const timerTag = el("timerTag");
+    const questionText = el("questionText");
+    const questionMeta = el("questionMeta");
+
+    const playerName = el("playerName");
+    const orderId = el("orderId");
+    const answer = el("answer");
+    const msgBox = el("msgBox");
+
+    const leaderBody = el("leaderBody");
+    const roundWinnersBox = el("roundWinnersBox");
+
+    const kpiPlayers = el("kpiPlayers");
+    const kpiAnswers = el("kpiAnswers");
+    const kpiRound = el("kpiRound");
+
+    const btnSubmit = el("btnSubmit");
+    const btnHint = el("btnHint");
+    const btnNext = el("btnNext");
+    const btnReset = el("btnReset");
+    const btnExport = el("btnExport");
+
+    /********************
+     * HELPERS
+     ********************/
+    function normalize(str){
+      return (str || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, ""); // remove acentos
+    }
+
+    function currentQuestion(){
+      return QUESTIONS[state.roundIndex] || QUESTIONS[0];
+    }
+
+    function ensurePlayer(name){
+      if(!leaderboard[name]){
+        leaderboard[name] = { points: 0, correct: 0, attempts: 0 };
+      }
+    }
+
+    function getRoundBucket(qid){
+      if(!roundResults[qid]){
+        roundResults[qid] = { firstWinnerName: null, winners: [] };
+      }
+      return roundResults[qid];
+    }
+
+    function setMessage(kind, text){
+      msgBox.className = "msg" + (kind ? " " + kind : "");
+      msgBox.innerHTML = text;
+    }
+
+    /********************
+     * TIMER (opcional)
+     ********************/
+    let timer = null;
+    let remaining = 0;
+
+    function startTimerIfNeeded(){
+      const q = currentQuestion();
+      if(timer) clearInterval(timer);
+      if(!q.timeLimitSec || q.timeLimitSec <= 0){
+        timerTag.textContent = "⏱️ Sem limite";
+        return;
+      }
+      remaining = q.timeLimitSec;
+      timerTag.textContent = "⏱️ " + remaining + "s";
+      timer = setInterval(() => {
+        remaining -= 1;
+        timerTag.textContent = "⏱️ " + remaining + "s";
+        if(remaining <= 0){
+          clearInterval(timer);
+          timer = null;
+          setMessage("bad", "⏳ Tempo esgotado! Tente novamente (sem pontuar) ou peça a próxima rodada.");
+        }
+      }, 1000);
+    }
+
+    /********************
+     * RENDER
+     ********************/
+    function renderQuestion(){
+      const q = currentQuestion();
+      roundLabel.textContent = `#${q.id}`;
+      difficultyTag.textContent = q.difficulty;
+      questionText.textContent = q.prompt;
+      questionMeta.textContent = q.title;
+
+      kpiRound.textContent = q.id;
+
+      // vencedor da rodada
+      const bucket = getRoundBucket(q.id);
+      const first = bucket.firstWinnerName;
+      const winners = bucket.winners;
+
+      if(first){
+        roundWinnersBox.className = "msg ok";
+        roundWinnersBox.innerHTML =
+          `<strong>Vencedor da rodada:</strong> ${escapeHtml(first)}<br/>` +
+          `<span style="color:var(--muted)">Acertaram também: ${winners.length > 1 ? winners.slice(1).map(escapeHtml).join(", ") : "—"}</span>`;
+      }else{
+        roundWinnersBox.className = "msg";
+        roundWinnersBox.innerHTML = "<strong>Vencedor da rodada:</strong> ainda ninguém.";
+      }
+
+      startTimerIfNeeded();
+      renderLeaderboard();
+    }
+
+    function renderLeaderboard(){
+      const entries = Object.entries(leaderboard)
+        .map(([name, v]) => ({ name, ...v }))
+        .sort((a,b) => (b.points - a.points) || (b.correct - a.correct) || a.name.localeCompare(b.name));
+
+      kpiPlayers.textContent = entries.length;
+      kpiAnswers.textContent = entries.reduce((sum, e) => sum + (e.attempts || 0), 0);
+
+      if(entries.length === 0){
+        leaderBody.innerHTML = `<tr><td colspan="4" style="color:var(--muted)">Ainda não há pontuações.</td></tr>`;
+        return;
+      }
+
+      leaderBody.innerHTML = entries.map((e, idx) => `
+        <tr>
+          <td>${idx+1}</td>
+          <td>${escapeHtml(e.name)}</td>
+          <td><strong>${e.points}</strong></td>
+          <td>${e.correct}</td>
+        </tr>
+      `).join("");
+    }
+
+    function persist(){
+      saveJSON(LS_KEYS.state, state);
+      saveJSON(LS_KEYS.leaderboard, leaderboard);
+      saveJSON(LS_KEYS.roundResults, roundResults);
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, (c) => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[c]));
+    }
+
+    /********************
+     * GAME ACTIONS
+     ********************/
+    function useHint(){
+      const name = normalize(playerName.value);
+      if(!name){
+        setMessage("bad","Digite seu <strong>nome</strong> antes de pedir dica.");
+        return;
+      }
+      const q = currentQuestion();
+      state.hintUsedThisRoundBy[name] = true;
+
+      ensurePlayer(name);
+      leaderboard[name].points = Math.max(0, leaderboard[name].points - POINTS.hintPenalty);
+
+      persist();
+      setMessage("", `💡 <strong>Dica:</strong> ${escapeHtml(q.hint)}<br/><span style="color:var(--muted)">(-${POINTS.hintPenalty} pts)</span>`);
+      renderLeaderboard();
+    }
+
+    function submitAnswer(){
+      const q = currentQuestion();
+
+      // se tiver timer e acabou, não pontua (mas ainda registra tentativa)
+      if(q.timeLimitSec > 0 && remaining <= 0){
+        const nameN = normalize(playerName.value);
+        if(nameN){
+          ensurePlayer(nameN);
+          leaderboard[nameN].attempts += 1;
+          persist();
+          renderLeaderboard();
+        }
+        setMessage("bad","⏳ Tempo esgotado nesta rodada. Peça a próxima rodada ou tente novamente após reiniciar a rodada.");
+        return;
+      }
+
+      const nameRaw = playerName.value.trim();
+      const name = normalize(nameRaw);
+      const ans = normalize(answer.value);
+
+      if(!nameRaw){
+        setMessage("bad","Digite seu <strong>nome</strong> para participar.");
+        return;
+      }
+      if(!ans){
+        setMessage("bad","Digite uma <strong>resposta</strong>.");
+        return;
+      }
+
+      ensurePlayer(name);
+      leaderboard[name].attempts += 1;
+
+      const accepted = q.accepted.map(normalize);
+      const isCorrect = accepted.some(a => ans.includes(a));
+
+      if(!isCorrect){
+        persist();
+        setMessage("bad","❌ Não foi dessa vez. Dica: a resposta está na descrição/ficha técnica do produto no site. 😉");
+        renderLeaderboard();
+        return;
+      }
+
+      // Correto!
+      const bucket = getRoundBucket(q.id);
+
+      // impedir múltiplos pontos por acertar a mesma rodada várias vezes
+      // (se já ganhou nesta rodada, só avisa)
+      if(bucket.winners.includes(name)){
+        persist();
+        setMessage("ok","✅ Você já acertou esta rodada e já pontuou. Aguarde a próxima! 🥂");
+        renderLeaderboard();
+        return;
+      }
+
+      let gained = POINTS.correct;
+
+      const hintUsed = !!state.hintUsedThisRoundBy[name];
+      if(!hintUsed){
+        gained += POINTS.correctNoHintBonus; // total 5
+      }
+
+      // primeiro a acertar?
+      if(!bucket.firstWinnerName){
+        bucket.firstWinnerName = nameRaw;
+        gained += POINTS.firstCorrectBonus;
+      }
+
+      bucket.winners.push(name);
+
+      leaderboard[name].points += gained;
+      leaderboard[name].correct += 1;
+
+      persist();
+
+      const order = orderId.value.trim();
+      setMessage("ok",
+        `🎉 <strong>Correto, ${escapeHtml(nameRaw)}!</strong><br/>` +
+        `Você ganhou <strong>+${gained} pts</strong> ` +
+        `${hintUsed ? "(com dica)" : "(sem dica)"} ` +
+        `${bucket.firstWinnerName === nameRaw ? "e levou o bônus de <strong>primeiro da rodada</strong>!" : ""}` +
+        (order ? `<br/><span style="color:var(--muted)">Pedido informado: ${escapeHtml(order)}</span>` : "")
+      );
+
+      // limpar resposta
+      answer.value = "";
+
+      renderQuestion();
+    }
+
+    function nextRound(){
+      // “admin”: avança localmente para a próxima questão
+      state.roundIndex = (state.roundIndex + 1) % QUESTIONS.length;
+      state.hintUsedThisRoundBy = {};
+      persist();
+      setMessage("", "🔁 Rodada avançada localmente. Poste a nova charada no grupo e bora! 🍾");
+      renderQuestion();
+    }
+
+    function resetAll(){
+      if(!confirm("Zerar placar e estado deste navegador?")) return;
+      localStorage.removeItem(LS_KEYS.state);
+      localStorage.removeItem(LS_KEYS.leaderboard);
+      localStorage.removeItem(LS_KEYS.roundResults);
+      location.reload();
+    }
+
+    function exportRanking(){
+      const entries = Object.entries(leaderboard)
+        .map(([name, v]) => ({ name, ...v }))
+        .sort((a,b) => (b.points - a.points) || (b.correct - a.correct) || a.name.localeCompare(b.name));
+
+      const q = currentQuestion();
+      const lines = [];
+      lines.push(`🏆 *Ranking Confraria Adolfo Lona* — Rodada #${q.id}`);
+      lines.push("");
+      entries.slice(0, 10).forEach((e, i) => {
+        const medal = i===0 ? "🥇" : i===1 ? "🥈" : i===2 ? "🥉" : "•";
+        lines.push(`${medal} ${e.name}: *${e.points} pts* (${e.correct} acertos)`);
+      });
+
+      const bucket = getRoundBucket(q.id);
+      lines.push("");
+      lines.push(`Vencedor da rodada: ${bucket.firstWinnerName ? bucket.firstWinnerName : "ainda ninguém"}`);
+
+      const text = lines.join("\n");
+      navigator.clipboard?.writeText(text).then(() => {
+        setMessage("ok","📋 Ranking copiado! Cole no WhatsApp do grupo.");
+      }).catch(() => {
+        setMessage("", "<strong>Copie manualmente:</strong><br/><pre style='white-space:pre-wrap;margin:8px 0 0'>"+escapeHtml(text)+"</pre>");
+      });
+    }
+
+    /********************
+     * INIT
+     ********************/
+    btnSubmit.addEventListener("click", submitAnswer);
+    btnHint.addEventListener("click", useHint);
+    btnNext.addEventListener("click", nextRound);
+    btnReset.addEventListener("click", resetAll);
+    btnExport.addEventListener("click", exportRanking);
+
+    // Enter envia
+    answer.addEventListener("keydown", (e) => {
+      if(e.key === "Enter") submitAnswer();
+    });
+
+    // Primeira renderização
+    renderQuestion();
+  </script>
+</body>
+</html>
